@@ -114,12 +114,35 @@
 
 ---
 
+## 快速体验 Personal Discovery MVP
+
+`app/` 是一套重新设计的 Web MVP，以《江雪》为视觉母题，串联「记忆证据 → 三问识我 → 三条五年路径 → 专业试走 → 分数匹配」。它不是原小程序的界面换皮。
+
+```bash
+cd app
+npm install
+npm run dev
+```
+
+质量检查：
+
+```bash
+npm run build
+npm run lint
+npm run test:e2e
+```
+
+端到端验收使用本机 Chrome，自动启动并关闭生产预览服务。当前对话为确定性演示引导，文件导入仅在本地进行关键词预分析；尚未接入真实 Agent、后端服务或生产数据。详见 [`app/README.md`](app/README.md)。
+
+---
+
 ## 当前状态
 
-**早期研发阶段。** 本仓库目前包含两部分可公开的资产：
+**早期研发阶段。** 本仓库目前包含三部分可公开的资产：
 
 | 目录 | 内容 | 成熟度 |
 | --- | --- | --- |
+| [`app/`](app/) | 《江雪》Personal Discovery Web MVP | 可运行前端 MVP，含完整探索流程与端到端验收 |
 | [`docs/`](docs/) | 15 份项目文档（愿景、用户研究、PRD、架构、数据治理、路线图、风险、术语） | 已成体系，持续演进 |
 | [`prototype/miniprogram/`](prototype/miniprogram/) | 微信小程序交互原型「高考志愿决策台」 | 可运行原型，验证交互与匹配逻辑 |
 
@@ -139,7 +162,7 @@
 
 | 阶段 | 主题 | 状态 |
 | --- | --- | --- |
-| Phase 1 | Personal Discovery MVP：对话导入、兴趣提取、证据画像、人生探索 Agent | [规划] |
+| Phase 1 | Personal Discovery MVP：对话导入、兴趣提取、证据画像、人生探索 Agent | 前端 MVP 已验收，真实 Agent 待接入 |
 | Phase 2 | Major Discovery：学科知识库、培养方案结构化、专业匹配 | [规划] |
 | Phase 3 | Admission Decision：招生数据接入、规则引擎、冲稳保、组合优化 | [规划] |
 | Phase 4 | University Intelligence：东北大学知识库与招生 Agent、多高校接入 | [规划] |
@@ -165,6 +188,9 @@
 
 ```text
 README.md                          ← 你在这里
+app/                               《江雪》自我探索 Web MVP
+CREDITS.md                         开源参考与转化说明
+licenses/                          第三方许可证
 docs/
 ├── 00-阅读指南与文档体系.md          文档地图与角色阅读路径
 ├── 01-产品愿景与设计哲学.md          为什么做、相信什么、不做什么
