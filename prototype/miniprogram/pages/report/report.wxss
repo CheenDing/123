@@ -1,0 +1,18 @@
+.report-page {
+  padding: 16rpx;
+  background: #f7f4ed;
+  min-height: 100vh;
+}
+
+.report-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  gap: 16rpx;
+}
+
+.empty-icon { font-size: 80rpx; }
+.empty-text { font-size: 30rpx; color: #6f675c; }
+.empty-hint { font-size: 24rpx; color: #a89f90; }

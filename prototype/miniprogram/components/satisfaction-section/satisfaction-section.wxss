@@ -1,0 +1,59 @@
+.satisfaction-section {
+  padding: 0 0 16rpx 0;
+}
+
+.sat-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1e1b16;
+  margin-bottom: 16rpx;
+}
+
+.satisfaction-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.sat-item {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.sat-label {
+  width: 70rpx;
+  font-size: 24rpx;
+  color: #6f675c;
+  flex-shrink: 0;
+}
+
+.sat-bar {
+  flex: 1;
+  height: 16rpx;
+  background: #efe9db;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.sat-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: #b08d57;
+  transition: width 0.3s ease;
+}
+
+.sat-value {
+  width: 50rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1e1b16;
+  text-align: right;
+}
+
+.sat-votes {
+  font-size: 20rpx;
+  color: #a89f90;
+}

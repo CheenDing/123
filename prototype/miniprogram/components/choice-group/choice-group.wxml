@@ -1,0 +1,14 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<view class="choice-field">
+  <text class="choice-label" wx:if="{{label}}">{{label}}</text>
+  <view class="choice-grid">
+    <view
+      wx:for="{{normalizedOptions}}"
+      wx:key="value"
+      class="choice {{F.hasItem(selected, item.value) || selected === item.value ? 'active' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="onTap"
+    >{{item.label}}</view>
+  </view>
+</view>

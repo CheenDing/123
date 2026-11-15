@@ -1,0 +1,23 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<view class="satisfaction-section" wx:if="{{hasData}}">
+  <text class="sat-title">⭐ 学生评价</text>
+  <view class="satisfaction-bars">
+    <view class="sat-item">
+      <text class="sat-label">综合</text>
+      <view class="sat-bar"><view class="sat-fill" style="width: {{overallPct}}%"></view></view>
+      <text class="sat-value">{{overall}}</text>
+    </view>
+    <view class="sat-item">
+      <text class="sat-label">环境</text>
+      <view class="sat-bar"><view class="sat-fill" style="width: {{envPct}}%"></view></view>
+      <text class="sat-value">{{env || '-'}}</text>
+    </view>
+    <view class="sat-item">
+      <text class="sat-label">生活</text>
+      <view class="sat-bar"><view class="sat-fill" style="width: {{lifePct}}%"></view></view>
+      <text class="sat-value">{{life || '-'}}</text>
+    </view>
+  </view>
+  <text class="sat-votes">{{F.formatNumber(votes)}} 人评价</text>
+</view>

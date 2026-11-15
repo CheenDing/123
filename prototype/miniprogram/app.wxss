@@ -1,0 +1,117 @@
+/* ===== Design System: CSS Variables ===== */
+/* 殿堂级视觉规范：暖象牙白底 + 哑光香槟金 + 墨色 */
+page {
+  --primary: #b08d57;
+  --primary-light: #f3ecdd;
+  --primary-dark: #8a6a3b;
+  --primary-bg: #faf8f2;
+  --primary-border: #dcc9a3;
+  --bg: #f7f4ed;
+  --surface: #fffdf9;
+  --border: #e3d9c6;
+  --border-light: #efe9db;
+  --text: #1e1b16;
+  --text-secondary: #6f675c;
+  --text-hint: #a89f90;
+  --danger: #9c3d34;
+  --danger-bg: #f8ecea;
+  --warning: #8a6a3b;
+  --warning-bg: #f6efdd;
+  --info: #7a6a45;
+  --info-bg: #f2eee0;
+  /* 冲/稳/保：低饱和暖调区分 */
+  --rush-bg: #f7e8da;
+  --rush-text: #a2542a;
+  --stable-bg: #e9e7d6;
+  --stable-text: #70683f;
+  --safe-bg: #f3ecdd;
+  --safe-text: #8a6a3b;
+  --ink: #1e1b16;
+  --radius-sm: 8rpx;
+  --radius: 12rpx;
+  --radius-lg: 16rpx;
+  --shadow-sm: 0 1rpx 4rpx rgba(96, 78, 50, 0.05);
+  --shadow: 0 2rpx 12rpx rgba(96, 78, 50, 0.07);
+  --font-serif: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 28rpx;
+  color: var(--text);
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+/* ===== Reset ===== */
+view, text, scroll-view, image, button, input, textarea, picker, switch, navigator {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+/* ===== Utility Classes ===== */
+.flex-row { display: flex; flex-direction: row; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; }
+.gap-xs { gap: 8rpx; }
+.gap-sm { gap: 12rpx; }
+.gap-md { gap: 20rpx; }
+.text-xs { font-size: 22rpx; }
+.text-sm { font-size: 24rpx; }
+.text-md { font-size: 28rpx; }
+.text-lg { font-size: 32rpx; }
+.text-hint { color: var(--text-hint); }
+.text-secondary { color: var(--text-secondary); }
+.font-bold { font-weight: 700; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== Base Card ===== */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1rpx solid var(--border);
+  padding: 24rpx;
+}
+
+/* ===== Tags ===== */
+.tag { font-size: 22rpx; padding: 4rpx 10rpx; border-radius: 6rpx; font-weight: 600; }
+.tag-sm { font-size: 20rpx; padding: 2rpx 8rpx; border-radius: 4rpx; }
+.tag-985 { background: #f3ecdd; color: #8a6a3b; }
+.tag-211 { background: #ece9dc; color: #5f5748; }
+.tag-double-first { background: #efe4d8; color: #8a5636; }
+.tag-baoyan { background: #f0e6d4; color: #96722c; }
+.tag-doctoral { background: #edeae2; color: #4f4a41; }
+.tag-acad { background: #f6efdd; color: #8a6a3b; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: flex; align-items: center; justify-content: center;
+  height: 80rpx; padding: 0 32rpx;
+  font-size: 28rpx; font-weight: 600;
+  border-radius: var(--radius); border: none;
+}
+/* 主按钮：墨黑实心 */
+.btn-primary { background: var(--ink); color: #f7f2e7; }
+/* 禁用态：浅灰金 */
+.btn-primary[disabled] { background: #ddd5c4; color: #a89f90; }
+/* 次按钮：描金边白底 */
+.btn-outline { background: var(--surface); color: var(--primary-dark); border: 2rpx solid var(--primary); }
+.btn-block { width: 100%; }
+
+/* ===== Divider ===== */
+.divider { height: 1rpx; background: var(--border-light); margin: 16rpx 0; }
+
+/* ===== Empty / Loading ===== */
+.empty-state { padding: 80rpx 40rpx; text-align: center; color: var(--text-hint); font-size: 26rpx; }
+.loading-spinner { width: 64rpx; height: 64rpx; border: 4rpx solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+@keyframes spin { to { transform: rotate(360deg); } }

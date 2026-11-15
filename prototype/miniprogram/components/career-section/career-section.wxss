@@ -1,0 +1,51 @@
+.career-section {
+  padding: 0;
+}
+
+.career-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1e1b16;
+  margin-bottom: 16rpx;
+}
+
+.career-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.career-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 18rpx;
+  background: #f3ecdd;
+  border-radius: 8rpx;
+  color: #8a6a3b;
+  font-size: 22rpx;
+}
+
+.career-employers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.career-label {
+  font-size: 22rpx;
+  color: #a89f90;
+}
+
+.employer-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 14rpx;
+  background: #faf8f2;
+  border: 1rpx solid #e3d9c6;
+  border-radius: 8rpx;
+  color: #6f675c;
+  font-size: 20rpx;
+}

@@ -1,0 +1,49 @@
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 40rpx 24rpx;
+}
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 28rpx;
+  color: #a89f90;
+  transition: color 0.3s;
+}
+
+.loading-step.active {
+  color: #b08d57;
+  font-weight: 600;
+}
+
+.loading-step.done {
+  color: #8a6a3b;
+}
+
+.step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: #efe9db;
+  font-size: 24rpx;
+}
+
+.loading-step.active .step-icon {
+  background: #f3ecdd;
+}
+
+.loading-step.done .step-icon {
+  background: #dcc9a3;
+}
+
+.done-icon {
+  color: #fffdf9;
+  background: #b08d57;
+  font-weight: 700;
+}

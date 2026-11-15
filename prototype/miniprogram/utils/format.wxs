@@ -1,0 +1,112 @@
+// WXS 格式化模块 — 运行在视图层，供 WXML 模板调用
+// 注意：WXS 不支持 ES6 语法，只能用 var 和 function
+
+function formatNumber(n) {
+  if (n == null || isNaN(n)) return '-';
+  var s = '' + n;
+  var result = '';
+  var count = 0;
+  for (var i = s.length - 1; i >= 0; i--) {
+    result = s[i] + result;
+    count++;
+    if (count === 3 && i > 0 && s[i - 1] !== '-') {
+      result = ',' + result;
+      count = 0;
+    }
+  }
+  return result;
+}
+
+function clamp(v, lo, hi) {
+  lo = lo || 0;
+  hi = hi || 100;
+  if (v < lo) return lo;
+  if (v > hi) return hi;
+  return v;
+}
+
+function toFixed(n, d) {
+  d = d || 0;
+  var num = parseFloat(n);
+  if (isNaN(num)) return '0';
+  return num.toFixed(d);
+}
+
+function pct(n) {
+  if (n == null) return '-';
+  return Math.round(n * 100) + '%';
+}
+
+function hasItem(arr, item) {
+  if (!arr) return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === item) return true;
+  }
+  return false;
+}
+
+function join(arr, sep) {
+  if (!arr) return '';
+  sep = sep || ' · ';
+  var result = '';
+  for (var i = 0; i < arr.length; i++) {
+    if (!arr[i]) continue;
+    if (result) result += sep;
+    result += arr[i];
+  }
+  return result;
+}
+
+function slice(arr, n) {
+  if (!arr) return [];
+  var result = [];
+  for (var i = 0; i < arr.length && i < n; i++) {
+    result.push(arr[i]);
+  }
+  return result;
+}
+
+function scoreColor(v) {
+  if (v == null) return '#a89f90';
+  if (v >= 85) return '#b08d57';
+  if (v >= 70) return '#9a9161';
+  if (v >= 55) return '#a2542a';
+  return '#9c3d34';
+}
+
+function formatGroup(label) {
+  if (!label || label === '-') return label || '-';
+  var short = label;
+  short = short.replace(getRegExp('首选物理', 'g'), '物');
+  short = short.replace(getRegExp('首选历史', 'g'), '史');
+  short = short.replace(getRegExp('再选不限', 'g'), '不限');
+  short = short.replace(getRegExp('再选化学', 'g'), '化');
+  short = short.replace(getRegExp('再选生物', 'g'), '生');
+  short = short.replace(getRegExp('再选思想政治', 'g'), '政');
+  short = short.replace(getRegExp('再选地理', 'g'), '地');
+  short = short.replace(getRegExp('（', 'g'), '(');
+  short = short.replace(getRegExp('）', 'g'), ')');
+  short = short.replace(getRegExp(' / 普通类$', 'g'), '');
+  return short;
+}
+
+function scoreLabel(v) {
+  if (v == null) return '-';
+  if (v >= 85) return '优秀';
+  if (v >= 70) return '良好';
+  if (v >= 55) return '一般';
+  return '偏低';
+}
+
+module.exports = {
+  formatNumber: formatNumber,
+  clamp: clamp,
+  toFixed: toFixed,
+  pct: pct,
+  hasItem: hasItem,
+  join: join,
+  slice: slice,
+  scoreColor: scoreColor,
+  scoreLabel: scoreLabel,
+  formatGroup: formatGroup,
+};

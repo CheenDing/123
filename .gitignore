@@ -1,0 +1,27 @@
+# ---- 本地素材与第三方资源（不纳入版本控制）----
+# 本地下载的第三方 Skill 包 / 参考资料，体积大且各自有独立许可证
+_downloads/
+vendor/
+
+# 压缩包不直接入库（应解包后提交源码）
+*.zip
+
+# ---- 微信开发者工具私有配置 ----
+# 含本机 appid / 编译设置，因人而异
+prototype/miniprogram/project.private.config.json
+prototype/miniprogram/.idea/
+
+# ---- 依赖与构建产物 ----
+node_modules/
+dist/
+build/
+*.min.js
+*.map
+
+# ---- 系统与编辑器 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.log

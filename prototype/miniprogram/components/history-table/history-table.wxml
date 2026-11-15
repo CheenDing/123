@@ -1,0 +1,33 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<view class="history-mini" wx:if="{{item}}">
+  <text class="history-title">近年录取与计划</text>
+  <text class="history-note">{{descText}}</text>
+  <scroll-view scroll-x class="history-scroll">
+    <view class="history-table">
+      <view class="history-row history-header">
+        <view class="history-cell cell-year" style="width:200rpx">年份</view>
+        <view class="history-cell cell-group" wx:if="{{isGroupMode}}" style="width:500rpx">专业组</view>
+        <view class="history-cell cell-score" style="width:220rpx">最低分</view>
+        <view class="history-cell cell-rank" wx:if="{{hasGroupRank}}" style="width:280rpx">组线位次</view>
+        <view class="history-cell cell-rank" style="width:280rpx">参考位次</view>
+        <view class="history-cell cell-plan" style="width:280rpx">{{isGroupMode ? '专业组计划' : '专业计划'}}</view>
+      </view>
+      <view class="history-row" wx:for="{{rows}}" wx:key="*this">
+        <view class="history-cell cell-year" style="width:200rpx">{{item.year}}</view>
+        <view class="history-cell cell-group" wx:if="{{isGroupMode}}" style="width:500rpx">
+          {{item._isSchool ? '同校 ' : ''}}{{F.formatGroup(item.groupLabel || item.group || mainGroup)}}
+        </view>
+        <view class="history-cell cell-score" style="width:220rpx">{{F.formatNumber(item.score)}}</view>
+        <view class="history-cell cell-rank" wx:if="{{hasGroupRank}}" style="width:280rpx">
+          {{item.groupRank ? F.formatNumber(item.groupRank) : '-'}}
+        </view>
+        <view class="history-cell cell-rank" style="width:280rpx">{{F.formatNumber(item.rank)}}</view>
+        <view class="history-cell cell-plan" style="width:280rpx">{{F.formatNumber(item.plan)}}</view>
+      </view>
+      <view class="history-empty" wx:if="{{!rows.length}}">
+        <text>暂无近年录取数据</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "score-bar": "../score-bar/score-bar",
+    "history-table": "../history-table/history-table",
+    "career-section": "../career-section/career-section",
+    "satisfaction-section": "../satisfaction-section/satisfaction-section"
+  }
+}

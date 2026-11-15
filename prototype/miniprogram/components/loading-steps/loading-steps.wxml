@@ -1,0 +1,12 @@
+<view class="loading-steps">
+  <view
+    wx:for="{{steps}}"
+    wx:key="label"
+    class="loading-step {{index === phase ? 'active' : ''}} {{index < phase ? 'done' : ''}}"
+  >
+    <text class="step-icon {{index < phase ? 'done-icon' : ''}}">
+      {{index < phase ? '✓' : item.icon}}
+    </text>
+    <text>{{item.label}}</text>
+  </view>
+</view>

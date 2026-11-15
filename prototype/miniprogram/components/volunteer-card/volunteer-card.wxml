@@ -1,0 +1,122 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<view class="volunteer-card" wx:if="{{item}}">
+  <!-- Card head -->
+  <view class="card-head">
+    <view class="card-head-left">
+      <view class="band band-{{item.band}}">{{item.bandLabel}}</view>
+      <text class="card-school">{{item.school}}</text>
+    </view>
+    <view class="score-pill">{{item.scores.total}}</view>
+  </view>
+
+  <!-- Meta row -->
+  <view class="card-meta-row" wx:if="{{metaParts.length}}">
+    <text>{{F.join(metaParts, ' · ')}}</text>
+  </view>
+
+  <!-- Life meta row -->
+  <view class="card-life-meta" wx:if="{{lifeParts.length}}">
+    <text>{{F.join(lifeParts, ' · ')}}</text>
+  </view>
+
+  <!-- Tags row -->
+  <view class="card-tags-row" wx:if="{{item.is985 || item.is211 || item.isDoubleFirstClass || item.hasBaoyan || item.hasDoctoral || item.academicians > 0 || discTags.length}}">
+    <text class="tag-985" wx:if="{{item.is985}}">985</text>
+    <text class="tag-211" wx:elif="{{item.is211}}">211</text>
+    <text class="tag-double-first" wx:elif="{{item.isDoubleFirstClass}}">双一流</text>
+    <text class="tag-baoyan" wx:if="{{item.hasBaoyan}}">保研</text>
+    <text class="tag-doctoral" wx:if="{{item.hasDoctoral}}">博士点</text>
+    <text class="tag-acad" wx:if="{{item.academicians > 0}}">院士 {{item.academicians}} 人</text>
+    <text class="tag-faculty tag-faculty-{{item.facultyLevel}}" wx:if="{{item.facultyLevel === 'A' || item.facultyLevel === 'B'}}">师资{{item.facultyLevel === 'A' ? '很强' : '较强'}}</text>
+    <block wx:for="{{discTags}}" wx:key="discipline">
+      <text class="disc-tag disc-{{item.matchType === 'direct' ? 'disc-direct' : ''}}">{{item.discipline}} {{item.rating}}</text>
+    </block>
+  </view>
+
+  <!-- Compact metrics -->
+  <view class="compact-metrics">
+    <text class="metric-item"><text class="metric-label">位次</text> {{F.formatNumber(item.minRank)}}</text>
+    <text class="metric-item"><text class="metric-label">分数</text> {{F.formatNumber(item.minScore)}}</text>
+    <text class="metric-item"><text class="metric-label">计划</text> {{F.formatNumber(item.totalPlan)}}</text>
+    <text class="metric-item"><text class="metric-label">学费</text> {{item.maxFee ? F.formatNumber(item.maxFee) : '-'}}</text>
+  </view>
+
+  <!-- Major chips -->
+  <view class="compact-majors" wx:if="{{mainMajors.length}}">
+    <text class="major-chip" wx:for="{{mainMajors}}" wx:key="name">{{item.name}}</text>
+  </view>
+
+  <!-- Risk line -->
+  <view class="risk-line">
+    <text class="risk-icon">⚠️</text>
+    <text>{{item.riskLabel}}</text>
+    <view class="adj-badge adj-{{item.adjustmentRisk.riskLevel}}" wx:if="{{hasAdjustment && item.adjustmentRisk && item.adjustmentRisk.riskLevel !== 'none'}}">
+      {{item.adjustmentRisk.riskLabel}}
+    </view>
+    <text class="trend-note" wx:if="{{item.llmTrendNote}}">📈 {{item.llmTrendNote}}</text>
+  </view>
+
+  <!-- Adjustment advice -->
+  <view class="adj-advice adj-{{item.adjustmentRisk.riskLevel}}" wx:if="{{hasAdjustment && item.adjustmentRisk && item.adjustmentRisk.advice}}">
+    <text>⚠️ {{item.adjustmentRisk.advice}}</text>
+    <view class="adj-majors" wx:if="{{item.adjustmentRisk.nonMatchingMajors && item.adjustmentRisk.nonMatchingMajors.length}}">
+      <text>可能调剂去向：{{F.join(item.adjustmentRisk.nonMatchingMajors, '、')}}</text>
+    </view>
+  </view>
+
+  <!-- Score bars -->
+  <view class="score-columns">
+    <score-bar label="录取安全" value="{{item.scores.safety}}"></score-bar>
+    <score-bar label="专业匹配" value="{{item.scores.major}}"></score-bar>
+    <score-bar label="城市匹配" value="{{item.scores.city}}"></score-bar>
+    <score-bar label="调剂风险" value="{{item.scores.adjustment}}" invert="{{true}}" wx:if="{{hasAdjustment}}"></score-bar>
+    <score-bar label="位次稳定" value="{{item.scores.trend}}"></score-bar>
+    <score-bar label="计划规模" value="{{item.scores.plan}}"></score-bar>
+    <score-bar label="AI排序" value="{{item.scores.llmRank}}" wx:if="{{item.scores.llmRank != null}}"></score-bar>
+  </view>
+
+  <!-- History table -->
+  <history-table item="{{item}}" volunteerUnit="{{volunteerUnit}}"></history-table>
+
+  <!-- Reason & Risk -->
+  <view class="reason" wx:if="{{item.reasonText}}">
+    <text class="reason-label">理由：</text>
+    <text>{{item.reasonText}}</text>
+  </view>
+  <view class="risk-copy" wx:if="{{item.riskCopy}}">
+    <text class="risk-label">风险提示：</text>
+    <text>{{item.riskCopy}}</text>
+  </view>
+
+  <!-- Card actions -->
+  <view class="card-actions">
+    <view class="action-btn {{expanded === 'career' ? 'active' : ''}}" data-section="career" bindtap="toggleExpand" wx:if="{{hasCareer}}">💼 就业</view>
+    <view class="action-btn {{expanded === 'life' ? 'active' : ''}}" data-section="life" bindtap="toggleExpand" wx:if="{{hasLifeInfo}}">🏠 生活</view>
+    <view class="action-btn {{expanded === 'ai' ? 'active' : ''}}" bindtap="loadAI">🤖 点评</view>
+    <view class="action-btn detail-action" bindtap="onDetail">📋 概览</view>
+  </view>
+
+  <!-- Career expand -->
+  <view class="card-expand" wx:if="{{expanded === 'career'}}">
+    <career-section career="{{item.career}}"></career-section>
+  </view>
+
+  <!-- Life expand -->
+  <view class="card-expand" wx:if="{{expanded === 'life'}}">
+    <satisfaction-section satisfaction="{{item.satisfaction}}" wx:if="{{hasSatisfaction}}"></satisfaction-section>
+    <view class="life-item" wx:if="{{item.locationType && item.locationType.detail}}"><text class="life-label">📍 校区：</text><text>{{item.locationType.detail}}</text></view>
+    <view class="life-item" wx:if="{{item.basicInfo.address || item.locationType.address}}"><text class="life-label">🏫 地址：</text><text>{{item.basicInfo.address || item.locationType.address}}</text></view>
+    <view class="life-item" wx:if="{{item.campusLife && item.campusLife.canteens}}"><text class="life-label">🍽️ 食堂：</text><text>{{item.campusLife.canteens}}</text></view>
+    <view class="life-item" wx:if="{{item.campusLife && item.campusLife.dorm}}"><text class="life-label">🏠 宿舍：</text><text>{{item.campusLife.dorm}}</text></view>
+    <view class="life-item" wx:if="{{item.campusLife && item.campusLife.campus_location}}"><text class="life-label">🗺️ 位置：</text><text>{{item.campusLife.campus_location}}</text></view>
+    <view class="life-item" wx:if="{{item.campusLife && item.campusLife.nearby}}"><text class="life-label">🛍️ 商圈：</text><text>{{item.campusLife.nearby}}</text></view>
+    <view class="life-item" wx:if="{{item.transferPolicy}}"><text class="life-label">🔄 转专业：</text><text>{{item.transferPolicy}}</text></view>
+  </view>
+
+  <!-- AI expand -->
+  <view class="card-expand" wx:if="{{expanded === 'ai'}}">
+    <view class="ai-loading" wx:if="{{aiLoading}}">🤖 AI正在分析{{item.school}}...</view>
+    <view class="ai-comment" wx:else>{{aiText}}</view>
+  </view>
+</view>

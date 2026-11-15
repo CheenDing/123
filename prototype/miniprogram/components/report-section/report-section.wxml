@@ -1,0 +1,186 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<view class="report" wx:if="{{hasPlan}}">
+  <!-- Title -->
+  <view class="report-title">
+    <text class="section-title-icon">✨</text>
+    <text class="section-title-text">综合分析报告</text>
+  </view>
+
+  <!-- Viz strip -->
+  <view class="viz-strip">
+    <!-- Band structure bar -->
+    <view class="viz-card">
+      <text class="viz-card-title">冲稳保结构</text>
+      <view class="rsb-bar">
+        <view class="rsb-segment rush" wx:if="{{bands.rush > 0}}" style="flex: {{bands.rush}}"></view>
+        <view class="rsb-segment stable" wx:if="{{bands.stable > 0}}" style="flex: {{bands.stable}}"></view>
+        <view class="rsb-segment safe" wx:if="{{bands.safe > 0}}" style="flex: {{bands.safe}}"></view>
+      </view>
+      <view class="rsb-legend">
+        <text class="rsb-legend-item"><text class="dot rush"></text>冲 {{bands.rush}}</text>
+        <text class="rsb-legend-item"><text class="dot stable"></text>稳 {{bands.stable}}</text>
+        <text class="rsb-legend-item"><text class="dot safe"></text>保 {{bands.safe}}</text>
+      </view>
+    </view>
+
+    <!-- Score averages -->
+    <view class="viz-card">
+      <text class="viz-card-title">各维度平均分</text>
+      <view class="score-dist-item" wx:for="{{scoreAvgs}}" wx:key="label">
+        <text class="score-dist-label">{{item.label}}</text>
+        <view class="score-dist-bar-wrap"><view class="score-dist-bar" style="width: {{item.avg}}%"></view></view>
+        <text class="score-dist-value">{{item.avg}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Report grid -->
+  <view class="report-grid">
+    <view class="report-grid-item">
+      <text class="report-grid-title">用户基本情况</text>
+      <text class="report-grid-text">{{profile.province}}{{profile.category}}，{{profile.batch}}，位次 {{F.formatNumber(profile.rank)}}，选科 {{profile.subjectCombination}}。</text>
+    </view>
+    <view class="report-grid-item">
+      <text class="report-grid-title">填报策略说明</text>
+      <text class="report-grid-text">先按科类、批次、位次、学费和项目类型过滤，再用专业、城市、升学就业、学费和调剂风险排序。若严格区间不足 4 条，会自动放宽位次边界补足可讨论方案。</text>
+    </view>
+    <view class="report-grid-item">
+      <text class="report-grid-title">志愿梯度结构</text>
+      <text class="report-grid-text">当前 {{selected.length}} 个志愿包含冲 {{bands.rush}} 个、稳 {{bands.stable}} 个、保 {{bands.safe}} 个。召回位次范围 {{F.formatNumber(recallMin)}} - {{F.formatNumber(recallMax)}}。</text>
+    </view>
+    <view class="report-grid-item">
+      <text class="report-grid-title">学校层次分析</text>
+      <text class="report-grid-text">入选项中 985 {{n985}} 个、211 {{n211}} 个、双一流 {{nDoubleFirst}} 个；同校多专业组 {{duplicatedSchoolsStr}}。</text>
+    </view>
+    <view class="report-grid-item">
+      <text class="report-grid-title">专业实力与就业升学</text>
+      <text class="report-grid-text">专业偏好为 {{prefMajorsStr || '未指定专业'}}，当前专业命中候选 {{F.formatNumber(majorPreferredCount)}} 个。报告逐项列出强弱命中，避免只看学校忽略专业组内部差异。</text>
+    </view>
+    <view class="report-grid-item">
+      <text class="report-grid-title">城市与家庭条件</text>
+      <text class="report-grid-text">城市偏好为 {{prefCitiesStr || '不限'}}，学费上限 {{F.formatNumber(profile.maxFee)}} 元；高收费和中外合作按用户约束进入硬过滤。</text>
+    </view>
+  </view>
+
+  <!-- Subreports -->
+  <view class="subreports">
+    <!-- Fallback subreports (no AI) -->
+    <view class="subreport-item">
+      <text class="subreport-title">专业匹配子报告</text>
+      <text class="subreport-text">本方案共推荐{{selected.length}}个专业组，覆盖{{n985}}所985、{{n211}}所211、{{nDoubleFirst}}所双一流院校。{{majorsSample.length > 0 ? '专业样本涵盖：' + F.join(majorsSample, '、') + '等方向。' : ''}}考生偏好方向为{{prefMajorsStr}}，建议逐组核对专业组内是否包含不能接受的专业。{{weakMajorCount > 0 ? '有' + weakMajorCount + '个志愿专业匹配分偏低（＜48分），需重点确认组内可接受专业比例。' : ''}}</text>
+    </view>
+    <view class="subreport-item">
+      <text class="subreport-title">城市与地理子报告</text>
+      <text class="subreport-text">推荐志愿分布在{{F.join(citiesAll, '、')}}等城市。{{citiesMatchedStr ? citiesMatchedStr + '命中城市偏好。' : ''}}{{citiesUnmatchedStr ? citiesUnmatchedStr + '未直接命中偏好城市。' : ''}}一线城市和强二线城市在实习机会、校招资源上优势明显。</text>
+    </view>
+    <view class="subreport-item">
+      <text class="subreport-title">读研/就业子报告</text>
+      <text class="subreport-text">{{selected.length}}个推荐志愿中，{{nBaoyan}}所有保研资格、{{nDoctoral}}所有博士点。就业竞争力不仅取决于专业名称，更与学校层次、地理位置、实习经历和个人能力有关。</text>
+    </view>
+    <view class="subreport-item">
+      <text class="subreport-title">考公考编子报告</text>
+      <text class="subreport-text">推荐专业组中，{{n985}}所985高校具备中央选调和定向选调资格。考公考编的竞争日益激烈，专业对口是报名门槛，建议以终为始。</text>
+    </view>
+    <view class="subreport-item">
+      <text class="subreport-title">学费与家庭条件子报告</text>
+      <text class="subreport-text">{{selected.length}}个推荐志愿学费范围为{{feeMin}}-{{feeMax}}元/年。{{overBudgetCount > 0 ? '有' + overBudgetCount + '个志愿的学费超出预算。' : '所有推荐志愿学费均在家庭预算范围内。'}}{{nCoop > 0 ? '方案中含中外合作办学项目。' : ''}}</text>
+    </view>
+    <view class="subreport-item">
+      <text class="subreport-title">数据复核子报告</text>
+      <text class="subreport-text">本报告涵盖{{selected.length}}个推荐专业组、{{totalPlanSlots}}个招生计划名额。正式填报前请务必核对院校专业组代码、选科要求、体检要求、单科成绩要求、转专业政策、调剂范围等关键信息。本报告为辅助参考工具。</text>
+    </view>
+  </view>
+
+  <!-- Sensitivity analysis -->
+  <view class="sensitivity">
+    <text class="sensitivity-title">敏感性分析：如果调整约束条件</text>
+    <view class="sensitivity-grid">
+      <view class="sensitivity-item">
+        <text class="sensitivity-label">放宽城市限制</text>
+        <text class="sensitivity-text">当前限定 {{prefCitiesStr}}。若接受更多地区，候选池预计扩容。</text>
+      </view>
+      <view class="sensitivity-item">
+        <text class="sensitivity-label">放宽专业限制</text>
+        <text class="sensitivity-text">当前偏好 {{prefMajorsStr}}。若放宽至"不限专业"，候选池将大幅增加。</text>
+      </view>
+      <view class="sensitivity-item">
+        <text class="sensitivity-label">调整偏好策略</text>
+        <text class="sensitivity-text">当前位次区间 {{F.formatNumber(recallMin)}}-{{F.formatNumber(recallMax)}}。调整策略可改变冲稳保配比。</text>
+      </view>
+      <view class="sensitivity-item">
+        <text class="sensitivity-label">接受更多项目类型</text>
+        <text class="sensitivity-text">若接受中外合作办学、高收费项目、冷门专业，备选池中有更多潜在项可进入候选。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Per-volunteer reasons -->
+  <view class="volunteer-reasons">
+    <text class="volunteer-reasons-title">逐项志愿说明</text>
+    <text class="section-intro">以下为逐志愿详细分析，与上方汇总形成互补。</text>
+    <view class="reason-row" wx:for="{{selected}}" wx:key="id" wx:for-index="idx" wx:for-item="it">
+      <text class="reason-row-school">{{idx + 1}}. {{it.school}}{{it.schoolCode ? ' (' + it.schoolCode + ')' : ''}} {{it.groupLabel || it.group}}</text>
+      <text class="reason-row-text">推荐理由：{{it.reasonText}}</text>
+      <text class="reason-row-text">风险提示：{{it.riskText}}</text>
+    </view>
+  </view>
+
+  <!-- Horizontal comparison table -->
+  <view class="comparison">
+    <text class="comparison-title">横向对比表</text>
+    <scroll-view scroll-x class="table-wrap-scroll">
+      <view class="comparison-table">
+        <view class="comp-row comp-header">
+          <view class="comp-cell" style="width:140rpx">梯度</view>
+          <view class="comp-cell" style="width:240rpx">院校</view>
+          <view class="comp-cell" style="width:340rpx">{{volunteerUnit === 'major_group' ? '专业组' : '专业'}}</view>
+          <view class="comp-cell" style="width:180rpx">地区</view>
+          <view class="comp-cell" style="width:200rpx">参考位次</view>
+          <view class="comp-cell" style="width:160rpx">计划</view>
+          <view class="comp-cell" style="width:160rpx">层次</view>
+          <view class="comp-cell" style="width:140rpx">保研</view>
+          <view class="comp-cell" style="width:140rpx">总分</view>
+          <view class="comp-cell" style="width:160rpx">风险</view>
+        </view>
+        <view class="comp-row" wx:for="{{selected}}" wx:key="id">
+          <view class="comp-cell" style="width:140rpx">{{item.bandLabel}}</view>
+          <view class="comp-cell" style="width:240rpx">{{item.school}}</view>
+          <view class="comp-cell" style="width:340rpx">{{item.groupLabel || item.group}}</view>
+          <view class="comp-cell" style="width:180rpx">{{item.location}}</view>
+          <view class="comp-cell" style="width:200rpx">{{F.formatNumber(item.avgRank || item.minRank)}}</view>
+          <view class="comp-cell" style="width:160rpx">{{F.formatNumber(item.totalPlan)}}</view>
+          <view class="comp-cell" style="width:160rpx">{{item.is985 ? '985' : item.is211 ? '211' : item.isDoubleFirstClass ? '双一流' : '-'}}</view>
+          <view class="comp-cell" style="width:140rpx">{{item.hasBaoyan ? '✓' : '-'}}</view>
+          <view class="comp-cell" style="width:140rpx">{{item.scores.total}}</view>
+          <view class="comp-cell" style="width:160rpx">{{item.riskLabel}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- Alternative pool -->
+  <view class="final-advice">
+    <text class="final-advice-title">替代志愿池</text>
+    <view class="alt-detail-list" wx:if="{{alternatives.length}}">
+      <view class="alt-detail-item" wx:for="{{alternatives}}" wx:key="id" wx:for-item="alt">
+        <view class="alt-detail-head">
+          <text class="band band-{{alt.band}}">{{alt.bandLabel}}</text>
+          <text class="alt-detail-school">{{alt.school}}</text>
+          <text class="alt-detail-group">{{alt.groupLabel || alt.group}}</text>
+        </view>
+        <view class="alt-detail-meta">
+          <text>位次 {{F.formatNumber(alt.minRank || alt.avgRank)}}</text>
+          <text>总分 {{alt.scores.total}}</text>
+        </view>
+        <text class="alt-detail-reason">{{alt.location}}地区{{alt.ownership}}</text>
+      </view>
+    </view>
+    <view wx:else>
+      <text class="no-data-text">当前条件下替代池不足，建议放宽城市或专业限制。</text>
+    </view>
+
+    <text class="final-advice-title" style="margin-top: 32rpx">最终填报建议</text>
+    <text class="final-advice-text">先确认不能接受的专业组，再保留 {{adviceRush}} 个冲刺项、{{adviceStable}} 个稳妥项和 {{adviceSafe}} 个保底项。若同一高校出现两个专业组，应按专业池差异分别判断。</text>
+  </view>
+</view>

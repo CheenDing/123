@@ -1,0 +1,10 @@
+<view class="career-section" wx:if="{{hasFlow}}">
+  <text class="career-title">💼 就业流向</text>
+  <view class="career-flow">
+    <text class="career-tag" wx:for="{{flowList}}" wx:key="place">{{item.place}} {{item.pct}}</text>
+  </view>
+  <view class="career-employers" wx:if="{{employers.length}}">
+    <text class="career-label">主要雇主：</text>
+    <text class="employer-tag" wx:for="{{employers}}" wx:key="*this">{{item}}</text>
+  </view>
+</view>

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "report-section": "../../components/report-section/report-section"
+  }
+}

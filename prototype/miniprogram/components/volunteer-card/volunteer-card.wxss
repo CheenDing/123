@@ -1,0 +1,308 @@
+.volunteer-card {
+  background: #fffdf9;
+  border: 1rpx solid #e3d9c6;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+/* Card head */
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx 12rpx;
+  gap: 16rpx;
+}
+
+.card-head-left {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-school {
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  font-size: 34rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  color: #1e1b16;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Band badge */
+.band {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 20rpx;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* 冲：低饱和赭调 / 稳：橄榄褐 / 保：香槟金 */
+.band-rush { background: #f7e8da; color: #a2542a; }
+.band-stable { background: #e9e7d6; color: #70683f; }
+.band-safe { background: #f3ecdd; color: #8a6a3b; }
+
+/* Score pill：墨黑实心 */
+.score-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72rpx;
+  height: 56rpx;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  background: #1e1b16;
+  color: #f7f2e7;
+  font-size: 32rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Meta rows */
+.card-meta-row {
+  padding: 0 24rpx 6rpx;
+  font-size: 22rpx;
+  color: #6f675c;
+}
+
+.card-life-meta {
+  padding: 0 24rpx 6rpx;
+  font-size: 20rpx;
+  color: #a89f90;
+}
+
+/* Tags row：低饱和暖调 */
+.card-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  padding: 8rpx 24rpx;
+}
+
+.tag-985 { background: #f3ecdd; color: #8a6a3b; }
+.tag-211 { background: #ece9dc; color: #5f5748; }
+.tag-double-first { background: #efe4d8; color: #8a5636; }
+.tag-baoyan { background: #f0e6d4; color: #96722c; }
+.tag-doctoral { background: #edeae2; color: #4f4a41; }
+.tag-acad { background: #f6efdd; color: #8a6a3b; }
+.tag-faculty { background: #eeeade; color: #6b6350; }
+
+.tag-985, .tag-211, .tag-double-first, .tag-baoyan, .tag-doctoral, .tag-acad, .tag-faculty {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.disc-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  background: #efe9db;
+  color: #6f675c;
+}
+
+.disc-direct {
+  border: 2rpx solid #b08d57;
+}
+
+/* Compact metrics */
+.compact-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx 24rpx;
+  padding: 12rpx 24rpx;
+  background: #faf8f2;
+  border: 1rpx solid #efe9db;
+  border-radius: 10rpx;
+  margin: 0 24rpx 12rpx;
+}
+
+.metric-item {
+  font-size: 24rpx;
+  color: #1e1b16;
+}
+
+.metric-label {
+  color: #a89f90;
+  font-weight: 500;
+  margin-right: 4rpx;
+}
+
+/* Major chips */
+.compact-majors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  padding: 0 24rpx 12rpx;
+}
+
+.major-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  background: #f3ecdd;
+  border-radius: 8rpx;
+  color: #8a6a3b;
+  font-size: 22rpx;
+}
+
+/* Risk line */
+.risk-line {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 10rpx 24rpx;
+  font-size: 24rpx;
+  color: #6f675c;
+  flex-wrap: wrap;
+}
+
+.risk-icon {
+  font-size: 28rpx;
+}
+
+.adj-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rpx 16rpx;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.adj-low { background: #f3ecdd; color: #8a6a3b; }
+.adj-medium { background: #f6efdd; color: #a2542a; }
+.adj-high { background: #f8ecea; color: #9c3d34; }
+
+.trend-note {
+  font-size: 22rpx;
+  color: #6f675c;
+}
+
+/* Adjustment advice */
+.adj-advice {
+  padding: 12rpx 24rpx;
+  margin: 8rpx 24rpx;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  color: #6f675c;
+}
+
+.adj-advice.adj-high { background: #f8ecea; border-left: 4rpx solid #9c3d34; }
+.adj-advice.adj-medium { background: #f6efdd; border-left: 4rpx solid #a2542a; }
+.adj-advice.adj-low { background: #f3ecdd; border-left: 4rpx solid #b08d57; }
+
+.adj-majors {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #a89f90;
+}
+
+/* Score columns */
+.score-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  padding: 16rpx 24rpx;
+}
+
+/* Reason & Risk */
+.reason, .risk-copy {
+  padding: 0 24rpx 10rpx;
+  font-size: 24rpx;
+  line-height: 1.65;
+  color: #6f675c;
+}
+
+.risk-copy {
+  color: #8a6a3b;
+  text-align: center;
+}
+
+.reason-label, .risk-label {
+  font-weight: 600;
+}
+
+/* Card actions */
+.card-actions {
+  display: flex;
+  gap: 12rpx;
+  padding: 12rpx 24rpx 20rpx;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 28rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #e3d9c6;
+  background: #fffdf9;
+  font-size: 24rpx;
+  color: #6f675c;
+  transition: all 0.15s;
+}
+
+/* 选中态：浅金底 + 金描边 */
+.action-btn.active {
+  background: #f3ecdd;
+  border-color: #b08d57;
+  color: #8a6a3b;
+  font-weight: 600;
+}
+
+/* 详情按钮：描金边白底 */
+.detail-action {
+  border-color: #b08d57;
+  color: #8a6a3b;
+  font-weight: 600;
+}
+
+/* Card expand */
+.card-expand {
+  padding: 16rpx 24rpx 20rpx;
+  background: #faf8f2;
+  border-top: 1rpx solid #e3d9c6;
+}
+
+.life-item {
+  font-size: 24rpx;
+  color: #6f675c;
+  padding: 6rpx 0;
+  line-height: 1.5;
+}
+
+.life-label {
+  font-weight: 600;
+  color: #1e1b16;
+}
+
+/* AI */
+.ai-loading {
+  font-size: 24rpx;
+  color: #a89f90;
+  padding: 20rpx 0;
+  text-align: center;
+}
+
+.ai-comment {
+  font-size: 26rpx;
+  color: #1e1b16;
+  line-height: 1.7;
+}

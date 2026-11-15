@@ -1,0 +1,28 @@
+.band {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 18rpx;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* 冲：低饱和赭调 */
+.band-rush {
+  background: #f7e8da;
+  color: #a2542a;
+}
+
+/* 稳：低饱和橄榄褐 */
+.band-stable {
+  background: #e9e7d6;
+  color: #70683f;
+}
+
+/* 保：香槟金调 */
+.band-safe {
+  background: #f3ecdd;
+  color: #8a6a3b;
+}

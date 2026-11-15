@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/report/report"
+  ],
+  "window": {
+    "navigationBarTitleText": "高考志愿决策台",
+    "navigationBarBackgroundColor": "#f7f4ed",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f4ed"
+  },
+  "tabBar": {
+    "color": "#a89f90",
+    "selectedColor": "#b08d57",
+    "backgroundColor": "#fffdf9",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "志愿方案"
+      },
+      {
+        "pagePath": "pages/report/report",
+        "text": "分析报告"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

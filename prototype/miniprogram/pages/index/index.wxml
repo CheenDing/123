@@ -1,0 +1,340 @@
+<wxs src="../../utils/format.wxs" module="F" />
+
+<scroll-view scroll-y class="page-scroll" wx:if="{{dataStatus !== 'loading'}}">
+  <!-- Quick filter bar -->
+  <view class="quick-bar">
+    <picker mode="selector" range="{{provinceNames}}" bindchange="onProvinceChange">
+      <view class="quick-item">
+        <text class="quick-label">省份</text>
+        <text class="quick-value">{{rawProfile.province}}</text>
+      </view>
+    </picker>
+    <view class="quick-divider"></view>
+    <picker mode="selector" range="{{categories}}" bindchange="onCategoryChange">
+      <view class="quick-item">
+        <text class="quick-label">科类</text>
+        <text class="quick-value">{{rawProfile.category}}</text>
+      </view>
+    </picker>
+    <view class="quick-divider"></view>
+    <picker mode="selector" range="{{batches}}" bindchange="onBatchChange">
+      <view class="quick-item">
+        <text class="quick-label">批次</text>
+        <text class="quick-value">{{rawProfile.batch}}</text>
+      </view>
+    </picker>
+    <view class="quick-toggle" bindtap="onToggleFilter">
+      <text>{{filterExpanded ? '收起' : '筛选'}}</text>
+    </view>
+  </view>
+
+  <!-- Expandable filter panel -->
+  <view class="filter-panel" wx:if="{{filterExpanded}}">
+    <view class="form-grid">
+      <!-- 位次 -->
+      <view class="field field-rank">
+        <text class="field-label">位次</text>
+        <input
+          class="field-input rank-input"
+          type="number"
+          value="{{rawProfile.rank}}"
+          bindinput="onRankInput"
+          placeholder="请输入 1-500000 的位次"
+          placeholder-class="rank-placeholder"
+          maxlength="6"
+        />
+      </view>
+
+      <!-- 选科组合 -->
+      <choice-group
+        wx:if="{{examMode !== 'old'}}"
+        label="选科组合"
+        value="{{rawProfile.subjectCombination}}"
+        options="{{subjectOptions}}"
+        field="subjectCombination"
+        bindchange="onFieldChange"
+      ></choice-group>
+
+      <!-- 报考偏好 -->
+      <choice-group
+        label="报考偏好"
+        value="{{rawProfile.preference}}"
+        options="{{preferenceOptions}}"
+        field="preference"
+        bindchange="onFieldChange"
+      ></choice-group>
+
+      <!-- 城市偏好 -->
+      <choice-group
+        label="城市偏好"
+        value="{{rawProfile.cities}}"
+        options="{{cityOptions}}"
+        multiple="{{true}}"
+        field="cities"
+        bindchange="onFieldChange"
+      ></choice-group>
+      <view class="field" wx:if="{{showCustomCity}}">
+        <text class="field-label">其他城市</text>
+        <input
+          class="field-input"
+          value="{{rawProfile.customCity}}"
+          bindinput="onCustomCityInput"
+          placeholder="例如：成都、南京、苏州"
+        />
+      </view>
+
+      <!-- 专业偏好 -->
+      <choice-group
+        label="专业偏好"
+        value="{{rawProfile.majors}}"
+        options="{{majorOptions}}"
+        multiple="{{true}}"
+        field="majors"
+        bindchange="onFieldChange"
+      ></choice-group>
+      <view class="field" wx:if="{{showCustomMajor}}">
+        <text class="field-label">其他专业</text>
+        <input
+          class="field-input"
+          value="{{rawProfile.customMajor}}"
+          bindinput="onCustomMajorInput"
+          placeholder="例如：口腔、审计、药学"
+        />
+      </view>
+
+      <!-- 学费上限 -->
+      <choice-group
+        label="学费上限"
+        value="{{rawProfile.maxFee}}"
+        options="{{feeOptions}}"
+        field="maxFee"
+        bindchange="onFieldChange"
+      ></choice-group>
+
+      <!-- 毕业规划 -->
+      <choice-group
+        label="毕业规划"
+        value="{{rawProfile.graduatePlan}}"
+        options="{{['考研', '保研', '就业', '考公考编', '出国', '暂无规划']}}"
+        multiple="{{true}}"
+        field="graduatePlan"
+        bindchange="onFieldChange"
+      ></choice-group>
+
+      <!-- 其他需求 -->
+      <view class="field">
+        <text class="field-label">其他需求</text>
+        <textarea
+          class="field-textarea"
+          value="{{rawProfile.otherNeeds}}"
+          bindinput="onOtherNeedsInput"
+          placeholder="例如：不想去太冷的城市、希望宿舍条件好"
+        ></textarea>
+      </view>
+    </view>
+
+    <!-- Toggles -->
+    <view class="toggles">
+      <label class="toggle" wx:for="{{toggles}}" wx:key="0" wx:for-item="tog">
+        <switch checked="{{rawProfile[tog[0]]}}" bindchange="onToggle" data-field="{{tog[0]}}" color="#b08d57" />
+        <text>{{tog[1]}}</text>
+      </label>
+    </view>
+  </view>
+
+  <!-- Submit button -->
+  <view class="submit-section">
+    <button class="btn-submit" bindtap="onSubmit" disabled="{{dataStatus !== 'ready' || !rawProfile.rank}}">
+      提交生成方案
+    </button>
+  </view>
+
+  <!-- API Status -->
+  <view class="api-status {{apiStatus}}" wx:if="{{apiStatus !== 'idle'}}">
+    <text wx:if="{{apiStatus === 'loading'}}">正在生成方案...</text>
+    <block wx:elif="{{apiStatus === 'online' && aiLoading}}">
+      <view class="ai-progress-wrap">
+        <view class="ai-progress-header">
+          <text class="ai-progress-title">AI 正在生成分析报告</text>
+          <text class="ai-progress-pct">{{reportProgress}}%</text>
+        </view>
+        <view class="status-progress">
+          <view class="progress-fill" style="width: {{reportProgress}}%"></view>
+        </view>
+        <text class="ai-progress-phase">{{reportPhase}}</text>
+      </view>
+    </block>
+    <text wx:elif="{{apiStatus === 'online' && reportReady}}">AI 分析报告已生成</text>
+    <text wx:elif="{{apiStatus === 'invalid-rank'}}">请先输入 1-500000 范围内的有效位次</text>
+    <text wx:else>服务不可用，请稍后重试</text>
+  </view>
+
+  <!-- Loading state -->
+  <view class="loading-section" wx:if="{{apiStatus === 'loading'}}">
+    <view class="landing-hero">
+      <text class="hero-title">正在生成志愿方案</text>
+      <text class="hero-desc">系统正在分析录取数据，为您匹配最优志愿组合...</text>
+      <loading-steps phase="{{loadingPhase}}"></loading-steps>
+    </view>
+  </view>
+
+  <!-- Results -->
+  <block wx:elif="{{apiStatus === 'online' && reportReady}}">
+    <!-- Topbar -->
+    <view class="topbar">
+      <view class="topbar-info">
+        <text class="topbar-title">算法候选池 {{F.formatNumber(apiPlan._candidateCount || apiPlan.candidates.length)}} 个，生成 {{F.formatNumber(apiPlan.selected.length)}} 个志愿</text>
+      </view>
+      <view class="topbar-actions">
+        <button class="btn-reset" size="mini" bindtap="onReset">重置</button>
+        <button class="btn-export" size="mini" bindtap="onExportPDF">导出PDF</button>
+      </view>
+    </view>
+
+    <!-- Mode hint -->
+    <view class="mode-hint" wx:if="{{volunteerUnit === 'major+school'}}">
+      <text>{{rawProfile.province}}采用「专业+院校」填报模式，每志愿为1个具体专业。</text>
+    </view>
+
+    <!-- Cards -->
+    <view class="cards-section">
+      <view class="section-header">
+        <text class="section-header-title">志愿方案</text>
+      </view>
+      <block wx:if="{{apiPlan.selected.length}}">
+        <volunteer-card
+          wx:for="{{apiPlan.selected}}"
+          wx:key="id"
+          item="{{item}}"
+          index="{{index}}"
+          volunteerUnit="{{volunteerUnit}}"
+          hasAdjustment="{{hasAdjustment}}"
+          profile="{{submittedProfile}}"
+          bindschoolclick="onSchoolClick"
+        ></volunteer-card>
+      </block>
+      <view class="empty-state" wx:else>
+        <text>当前条件下没有生成志愿。请放宽学费、城市、批次或项目限制后重新提交。</text>
+      </view>
+    </view>
+
+    <!-- Alternatives -->
+    <view class="alternatives" wx:if="{{apiPlan.alternatives.length}}">
+      <view class="section-header">
+        <text class="section-header-title">替代志愿池</text>
+      </view>
+      <view class="alt-grid">
+        <view class="alt-item" wx:for="{{apiPlan.alternatives}}" wx:key="id" wx:for-item="alt">
+          <view class="alt-item-main">
+            <text class="alt-item-school">{{alt.school}}</text>
+            <text class="alt-item-meta">{{alt.bandLabel}} / {{alt.location}} / {{F.formatNumber(alt.minRank)}}</text>
+          </view>
+          <view class="alt-detail-btn" data-alt-idx="{{index}}" catchtap="onAltClick">概览</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Report section -->
+    <report-section
+      profile="{{submittedProfile}}"
+      plan="{{apiPlan}}"
+      aiText="{{aiText}}"
+      volunteerUnit="{{volunteerUnit}}"
+    ></report-section>
+  </block>
+
+  <!-- Landing page -->
+  <view class="landing" wx:elif="{{apiStatus === 'idle' && !hasSubmitted}}">
+    <view class="landing-hero">
+      <text class="hero-title">{{rawProfile.province}}高考志愿报考决策台</text>
+      <text class="hero-desc">结合规则引擎与 AI 分析，为考生提供个性化志愿方案。</text>
+    </view>
+    <view class="landing-flow">
+      <text class="flow-title">使用流程</text>
+      <view class="flow-steps">
+        <view class="flow-step">
+          <text class="flow-step-num">1</text>
+          <text class="flow-step-title">填写画像</text>
+          <text class="flow-step-desc">选择科类、位次、专业偏好等基本信息</text>
+        </view>
+        <view class="flow-step">
+          <text class="flow-step-num">2</text>
+          <text class="flow-step-title">提交生成</text>
+          <text class="flow-step-desc">触发规则引擎筛选评分和 AI 分析</text>
+        </view>
+        <view class="flow-step">
+          <text class="flow-step-num">3</text>
+          <text class="flow-step-title">查看报告</text>
+          <text class="flow-step-desc">浏览 8 个冲稳保志愿方案和逐项分析</text>
+        </view>
+        <view class="flow-step">
+          <text class="flow-step-num">4</text>
+          <text class="flow-step-title">导出 PDF</text>
+          <text class="flow-step-desc">一键导出排版完整的志愿填报报告</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 温馨提示 -->
+    <view class="landing-tips {{tipsExpanded ? 'expanded' : ''}}">
+      <view class="tips-header" bindtap="onToggleTips">
+        <text class="tips-header-title">温馨提示</text>
+        <text class="tips-toggle">{{tipsExpanded ? '▲' : '▼'}}</text>
+      </view>
+      <view class="tips-summary" wx:if="{{!tipsExpanded}}">
+        <text>基于多维算法从数千条招生计划中筛选志愿方案，位次为核心匹配依据，本工具不替代正式填报。</text>
+      </view>
+      <view class="tips-content" wx:if="{{tipsExpanded}}">
+        <text class="tips-h4">系统功能说明</text>
+        <view class="tips-list">
+          <text class="tips-li"><text class="tips-strong">智能填报推荐：</text>基于考生画像（分数、位次、省份、选科、偏好等），通过多维度算法从数千条招生计划中筛选出最适合的志愿方案</text>
+          <text class="tips-li"><text class="tips-strong">冲-稳-保分层：</text>自动将推荐结果分为冲刺、稳妥、保底三个梯度，帮助考生合理分配志愿</text>
+          <text class="tips-li"><text class="tips-strong">专业组匹配：</text>根据选科要求、分数位次、学费偏好、城市偏好等硬性条件进行精准过滤</text>
+          <text class="tips-li"><text class="tips-strong">AI 智能分析：</text>可对每个志愿方案进行 AI 深度解读，包括录取概率分析、专业前景评估等</text>
+          <text class="tips-li"><text class="tips-strong">PDF 报告导出：</text>一键生成排版完整的志愿填报参考报告，方便打印和分享</text>
+        </view>
+        <text class="tips-h4">使用方法</text>
+        <view class="tips-list">
+          <text class="tips-li"><text class="tips-strong">第一步：</text>填写考生基本信息（省份、科类、分数、位次）</text>
+          <text class="tips-li"><text class="tips-strong">第二步：</text>设置偏好条件（目标城市、学费范围、专业倾向等）</text>
+          <text class="tips-li"><text class="tips-strong">第三步：</text>提交后系统自动生成志愿方案，可查看详细分析</text>
+          <text class="tips-li"><text class="tips-strong">第四步：</text>确认方案后可导出 PDF 报告</text>
+        </view>
+        <text class="tips-h4">重要提示</text>
+        <view class="tips-list">
+          <text class="tips-li">本工具提供的推荐结果仅供参考，不替代正式填报</text>
+          <text class="tips-li">最终志愿方案请以省教育考试院官方发布的数据和要求为准</text>
+          <text class="tips-li">建议结合个人兴趣、职业规划、家庭情况等综合考量</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view style="height: 120rpx"></view>
+</scroll-view>
+
+<!-- Loading splash -->
+<view class="splash" wx:if="{{dataStatus === 'loading'}}">
+  <text class="splash-icon">🎓</text>
+  <text class="splash-text">正在加载省份数据...</text>
+</view>
+
+<!-- School detail modal -->
+<school-detail-modal
+  item="{{selectedSchool}}"
+  visible="{{!!selectedSchool}}"
+  bindclose="onCloseSchoolDetail"
+></school-detail-modal>
+
+<!-- AI Chat floating button -->
+<view class="chat-float-btn" wx:if="{{hasSubmitted}}" bindtap="toggleChat">
+  <text>🤖</text>
+</view>
+
+<!-- AI Chat -->
+<ai-chat
+  wx:if="{{showChat}}"
+  profile="{{submittedProfile}}"
+  recommendations="{{apiPlan}}"
+  bindclose="onCloseChat"
+></ai-chat>

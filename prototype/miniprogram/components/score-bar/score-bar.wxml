@@ -1,0 +1,9 @@
+<view class="score-bar">
+  <view class="score-bar-head {{center ? 'score-bar-head--center' : ''}}">
+    <text class="score-bar-label">{{label}}</text>
+    <text class="score-bar-level" style="color: {{color}}" wx:if="{{!center}}">{{level}}</text>
+  </view>
+  <view class="score-bar-track">
+    <view class="score-bar-fill" style="width: {{display}}%; background: {{color}}"></view>
+  </view>
+</view>

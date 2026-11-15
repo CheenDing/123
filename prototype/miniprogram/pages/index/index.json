@@ -1,0 +1,15 @@
+{
+  "usingComponents": {
+    "choice-group": "../../components/choice-group/choice-group",
+    "score-bar": "../../components/score-bar/score-bar",
+    "loading-steps": "../../components/loading-steps/loading-steps",
+    "volunteer-card": "../../components/volunteer-card/volunteer-card",
+    "school-group-card": "../../components/school-group-card/school-group-card",
+    "school-detail-modal": "../../components/school-detail-modal/school-detail-modal",
+    "history-table": "../../components/history-table/history-table",
+    "career-section": "../../components/career-section/career-section",
+    "satisfaction-section": "../../components/satisfaction-section/satisfaction-section",
+    "report-section": "../../components/report-section/report-section",
+    "ai-chat": "../../components/ai-chat/ai-chat"
+  }
+}

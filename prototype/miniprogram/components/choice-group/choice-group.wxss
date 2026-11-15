@@ -1,0 +1,39 @@
+.choice-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.choice-label {
+  font-size: 26rpx;
+  color: #6f675c;
+  font-weight: 500;
+}
+
+.choice-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #e3d9c6;
+  background: #fffdf9;
+  font-size: 26rpx;
+  color: #6f675c;
+  transition: all 0.15s;
+}
+
+/* 选中态：浅金底 + 金描边 */
+.choice.active {
+  background: #f3ecdd;
+  border-color: #b08d57;
+  color: #8a6a3b;
+  font-weight: 600;
+}
